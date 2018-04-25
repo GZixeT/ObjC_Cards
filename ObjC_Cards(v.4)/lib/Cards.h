@@ -23,6 +23,7 @@ typedef enum{
 @property NSInteger firstCardOpen;
 @property NSInteger secondCardOpen;
 @property GameState gameState;
++ (Cards*) sharedInstance;
 - (id) init;
 - (void) openCard:(NSInteger)index :(BOOL)isOpen;
 - (BOOL) isGameEnd;

@@ -6,16 +6,23 @@
 //  Copyright © 2018 Георгий Зубков. All rights reserved.
 //
 
-//Проба коммита
+//Проба коммита 2
 #import "Cards.h"
 
-static Cards *singletone=nil;
-
+static Cards *uniqueInstance=nil;
 @implementation Cards
 @synthesize map;
 @synthesize firstCardOpen;
 @synthesize secondCardOpen;
 @synthesize gameState;
++ (Cards*) sharedInstance{
+    @synchronized(self)
+    {
+        if(uniqueInstance==nil)
+            uniqueInstance=[[self alloc]init];
+    }
+    return uniqueInstance;
+}
 - (id) init{
     if(self=[super init])
     {

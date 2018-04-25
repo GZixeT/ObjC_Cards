@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		86650ED3208F6CA50029C0DF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86650ED2208F6CA50029C0DF /* main.m */; };
 		86650ED9208F6D040029C0DF /* GameConsoleInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 86650ED8208F6D040029C0DF /* GameConsoleInterface.m */; };
+		86798DE82090A031001EF2F9 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 86798DE22090A031001EF2F9 /* Card.m */; };
+		86798DE92090A031001EF2F9 /* Cards.m in Sources */ = {isa = PBXBuildFile; fileRef = 86798DE42090A031001EF2F9 /* Cards.m */; };
+		86798DEA2090A031001EF2F9 /* Map.m in Sources */ = {isa = PBXBuildFile; fileRef = 86798DE72090A031001EF2F9 /* Map.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,9 +29,14 @@
 /* Begin PBXFileReference section */
 		86650EC8208F6BD40029C0DF /* ObjC_Cards(v.4) */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ObjC_Cards(v.4)"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86650ED2208F6CA50029C0DF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		86650ED5208F6CCC0029C0DF /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = SOURCE_ROOT; };
 		86650ED7208F6D040029C0DF /* GameConsoleInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConsoleInterface.h; sourceTree = SOURCE_ROOT; };
 		86650ED8208F6D040029C0DF /* GameConsoleInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameConsoleInterface.m; sourceTree = SOURCE_ROOT; };
+		86798DE22090A031001EF2F9 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		86798DE32090A031001EF2F9 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		86798DE42090A031001EF2F9 /* Cards.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cards.m; sourceTree = "<group>"; };
+		86798DE52090A031001EF2F9 /* Cards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cards.h; sourceTree = "<group>"; };
+		86798DE62090A031001EF2F9 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
+		86798DE72090A031001EF2F9 /* Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Map.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,8 +78,8 @@
 		86650ED4208F6CB70029C0DF /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				86798DE12090A01C001EF2F9 /* lib */,
 				86650ED6208F6CE90029C0DF /* GameInterface */,
-				86650ED5208F6CCC0029C0DF /* lib */,
 			);
 			name = Cards;
 			path = "ObjC_Cards(v.4)";
@@ -84,6 +92,19 @@
 				86650ED8208F6D040029C0DF /* GameConsoleInterface.m */,
 			);
 			name = GameInterface;
+			sourceTree = "<group>";
+		};
+		86798DE12090A01C001EF2F9 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				86798DE32090A031001EF2F9 /* Card.h */,
+				86798DE22090A031001EF2F9 /* Card.m */,
+				86798DE52090A031001EF2F9 /* Cards.h */,
+				86798DE42090A031001EF2F9 /* Cards.m */,
+				86798DE62090A031001EF2F9 /* Map.h */,
+				86798DE72090A031001EF2F9 /* Map.m */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,7 +164,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				86650ED3208F6CA50029C0DF /* main.m in Sources */,
+				86798DEA2090A031001EF2F9 /* Map.m in Sources */,
 				86650ED9208F6D040029C0DF /* GameConsoleInterface.m in Sources */,
+				86798DE82090A031001EF2F9 /* Card.m in Sources */,
+				86798DE92090A031001EF2F9 /* Cards.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
