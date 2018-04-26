@@ -9,17 +9,18 @@
 #import "GameConsoleInterface.h"
 
 @implementation GameConsoleInterface
-- (void) printCards:(Cards *)cards{
-    NSUInteger width= [cards getCapasity] / [[cards map] height];
+- (void) printCards{
+    Cards *cards = [Cards sharedInstance];
+    NSUInteger width= [[cards map]count] / [cards height];
     if(cards!=nil){
-        if([[cards map]getMap]!=nil)
+        if([cards map]!=nil)
         {
             int index=0;
             printf("----------\n");
-            for(int i=0;i<[[[cards map]getMap]count]/width;i++){
+            for(int i=0;i<[[cards map]count]/width;i++){
                 for(int j=0;j<width;j++){
                     [self printOpenCardToConsole:
-                     [[cards map]getMapElementWithIndext:index]];
+                     [cards getMapElementWithIndext:index]];
                     index++;
                 }
                 printf("\n");

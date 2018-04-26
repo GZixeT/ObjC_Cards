@@ -15,6 +15,8 @@ static Cards *uniqueInstance=nil;
 @synthesize firstCardOpen;
 @synthesize secondCardOpen;
 @synthesize gameState;
+@synthesize cardDeckNumber;
+@synthesize height;
 + (Cards*) sharedInstance{
     @synchronized(self)
     {
@@ -26,18 +28,26 @@ static Cards *uniqueInstance=nil;
 - (id) init{
     if(self=[super init])
     {
-        [self setFirstCardOpen:GameStateBegin];
-        [self setSecondCardOpen:GameStateBegin];
-        [self setGameState:GameStateBegin];
+        map = [[NSMutableArray alloc]init];
+        [self setFirstCardOpen:GameStateCloseFirstCard];
+        [self setSecondCardOpen:GameStateCloseFirstCard];
+        [self setGameState:GameStateCloseFirstCard];
     }
     else NSLog(@"Ошибка инициализации");
     return self;
 }
-- (void) openCard:(NSInteger)index :(BOOL)isOpen{
+- (id) getMapElementWithIndext:(NSInteger)index{
+    if(map==nil){
+        NSLog(@"Карта еще не создана");
+        return false;
+    }
+    return [map objectAtIndex:index];
+}
+- (void) openCardWithIndex:(NSInteger)index :(BOOL)isOpen{
     if(map!=nil){
-        if(index<[[map getMap]count])
+        if(index<[map count] && [map count]!=0)
         {
-            Card *card=[map getMapElementWithIndext:index];
+            Card *card=[self getMapElementWithIndext:index];
             [card setOpen:isOpen];
             if(isOpen){
                 if(firstCardOpen<0)
@@ -65,14 +75,14 @@ static Cards *uniqueInstance=nil;
 - (BOOL) isGameEnd{
     if(map!=nil){
         int count=0;
-        for(int i=0;i<[[map getMap]count];i++){
-            Card *card=[map getMapElementWithIndext:i];
+        for(int i=0;i<[map count];i++){
+            Card *card=[self getMapElementWithIndext:i];
             if([card open]){
                 count++;
             }
             else return false;
         }
-        if(count==[[map getMap]count]){
+        if(count==[map count]){
             gameState=GameStateEnd;
             return true;
         }
@@ -87,33 +97,40 @@ static Cards *uniqueInstance=nil;
     }
     return copy;
 }
+- (void) shuffleMapElements{
+    if(map!=nil){
+        int index=0;
+        id tmp;
+        for(int i=0;i<[map count];i++){
+            index= (int)(arc4random() % (int) ([map count]-i) + i);
+            tmp=[self getMapElementWithIndext:i];
+            [map replaceObjectAtIndex:i withObject:[self getMapElementWithIndext:index]];
+            [map replaceObjectAtIndex:index withObject:tmp];
+        }
+    }
+    else NSLog(@"Карта еще не создана");
+}
 - (void) setCards:(NSMutableArray *)array{
     if(map){
-        [map addArray:array];
-        [map addArray:[self copyArray:array]];
-        [map shuffleElements];
+        [map addObjectsFromArray:array];
+        [map addObjectsFromArray:[self copyArray:array]];
+        [self shuffleMapElements];
     }
     else NSLog(@"Карта уже заполнена");
 }
-- (NSUInteger)getCapasity
+- (void)setCapasityCardDeckWithHeight:(NSUInteger)height CardDeckNumber:(NSUInteger)number
 {
-    return [map height] * [map width];
-}
-- (void)setCapasityWithHeight:(NSUInteger)height Widht:(NSUInteger)wight
-{
-    if (!map)
-        map =[[Map alloc] init];
-    [[self map]setWidth:height];
-    [[self map]setHeight:wight];
+    [self setHeight:height];
+    [self setCardDeckNumber:number];
 }
 - (void)fillWithRandomCards
 {
-    NSMutableArray *array = [[Card alloc]getRandomArray:[self getCapasity]];
+    NSMutableArray *array = [[Card alloc]getRandomArray:cardDeckNumber];
     [self setCards:[array copy]];
 }
-- (void)fillWithRandomCardsWithCapasityHeight:(NSUInteger)height Widht:(NSUInteger)wight
+- (void)fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number
 {
-    [self setCapasityWithHeight:height Widht:wight];
+    [self setCapasityCardDeckWithHeight:height CardDeckNumber:number];
     [self fillWithRandomCards];
 }
 @end

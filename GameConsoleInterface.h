@@ -10,7 +10,7 @@
 #import "Cards.h"
 
 @interface GameConsoleInterface : NSObject
-- (void) printCards:(Cards*)cards;
+- (void) printCards;
 - (void) printOpenCardToConsole:(Card*)card;
 - (void) printClosedCardToConsole;
 @end

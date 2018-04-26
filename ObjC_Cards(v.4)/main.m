@@ -10,40 +10,44 @@
 #import "GameConsoleInterface.h"
 #import "Card.h"
 
-#define WIGHT 3
 #define HEIGHT 3
-#define EXIT_COMMAND 10
+#define CARD_DECK_NUMBER 6
+typedef enum{
+    GameMenuBegin=1,
+    GameMenuOpenCard,
+    GameMenuExit=10
+} GameMenu;
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
+        int menuSwitcher;
         GameConsoleInterface *interface=[[GameConsoleInterface alloc]init];
         Cards *cards=[Cards sharedInstance];
-        [cards fillWithRandomCardsWithCapasityHeight:WIGHT Widht:HEIGHT];
-        int k=EXIT_COMMAND;
+        [cards fillWithRandomCardsWithHeightAndNumber:HEIGHT CardDeckNumber:CARD_DECK_NUMBER];
         while(TRUE){
             printf("1.Начать игру.\n");
             printf("2.Открыть карту.\n");
             printf("10.Выход.\n");
             printf("Введите номер действия:");
-            scanf("%d",&k);
-            switch(k){
-                case 1:{
-                    [interface printCards:cards];
+            scanf("%d",&menuSwitcher);
+            switch(menuSwitcher){
+                case GameMenuBegin:{
+                    [interface printCards];
                 }break;
-                case 2:{
+                case GameMenuOpenCard:{
                     int number=0;
                     printf("Введите номер карты:");
                     scanf("%d",&number);
-                    [cards openCard:number :true];
-                    [interface printCards:cards];
+                    [cards openCardWithIndex:number :true];
+                    [interface printCards];
                     switch([cards getGameState]){
                         case GameStateTwoCardsOpen:{
-                            Card *first=[[cards map]getMapElementWithIndext:[cards firstCardOpen]];
-                            Card *second=[[cards map]getMapElementWithIndext:[cards secondCardOpen]];
+                            Card *first=[cards getMapElementWithIndext:[cards firstCardOpen]];
+                            Card *second=[cards getMapElementWithIndext:[cards secondCardOpen]];
                             if(![first isEqual:second]){
-                                [cards openCard:[cards firstCardOpen] :false];
-                                [cards openCard:[cards secondCardOpen] :false];
-                                [interface printCards:cards];
+                                [cards openCardWithIndex:[cards firstCardOpen] :false];
+                                [cards openCardWithIndex:[cards secondCardOpen] :false];
+                                [interface printCards];
                             }
                             [cards setFirstCardOpen:GameStateCloseFirstCard];
                             [cards setSecondCardOpen:GameStateCloseFirstCard];
@@ -53,11 +57,19 @@ int main(int argc, const char * argv[]) {
                             break;
                         case GameStateError:
                             printf("Error.\n");
+                            break;
+                        default:
+                            printf("Error.\n");
+                            break;
                     }
                 }break;
                     
-                case EXIT_COMMAND:
+                case GameMenuExit:
                 return 0; // exit game cicle
+                    
+                default:
+                    printf("Error.\n");
+                    break;
             }
         };
     }

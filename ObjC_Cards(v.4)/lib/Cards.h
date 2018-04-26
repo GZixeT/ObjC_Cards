@@ -10,7 +10,6 @@
 #import "Map.h"
 #import "Card.h"
 typedef enum{
-    GameStateBegin=-1,
     GameStateCloseFirstCard = -1, // 0/2 карт открыто
     GameStateOneCardOpen, // 1/2 карт открыто
     GameStateTwoCardsOpen,
@@ -19,18 +18,21 @@ typedef enum{
 }GameState;
 
 @interface Cards : NSObject
-@property Map *map;
+@property NSMutableArray *map;
 @property NSInteger firstCardOpen;
 @property NSInteger secondCardOpen;
+@property NSInteger height;
+@property NSInteger cardDeckNumber;
 @property GameState gameState;
 + (Cards*) sharedInstance;
 - (id) init;
-- (void) openCard:(NSInteger)index :(BOOL)isOpen;
+- (id) getMapElementWithIndext:(NSInteger)index;
 - (BOOL) isGameEnd;
-- (void) setCards:(NSMutableArray*)array;
 - (GameState) getGameState;
-- (void)fillWithRandomCardsWithCapasityHeight:(NSUInteger)height Widht:(NSUInteger)wight;
-- (void)setCapasityWithHeight:(NSUInteger)height Widht:(NSUInteger)wight;
 - (void)fillWithRandomCards;
-- (NSUInteger)getCapasity;
+- (void) shuffleMapElements;
+- (void) setCards:(NSMutableArray*)array;
+- (void) openCardWithIndex:(NSInteger)index :(BOOL)isOpen;
+- (void) fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
+- (void) setCapasityCardDeckWithHeight:(NSUInteger)height CardDeckNumber:(NSUInteger)number; //заполняем размер колоды, а не самой карты
 @end
