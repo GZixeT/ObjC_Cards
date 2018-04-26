@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Map : NSObject{
+@interface Map : NSMutableArray{
     NSMutableArray *_map;
 }
 @property NSInteger width;

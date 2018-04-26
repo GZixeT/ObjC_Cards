@@ -10,7 +10,7 @@
 
 @implementation GameConsoleInterface
 - (void) printCards:(Cards *)cards{
-    int width=(int)[[cards map]width];
+    NSUInteger width= [cards getCapasity] / [[cards map] height];
     if(cards!=nil){
         if([[cards map]getMap]!=nil)
         {

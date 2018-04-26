@@ -88,12 +88,32 @@ static Cards *uniqueInstance=nil;
     return copy;
 }
 - (void) setCards:(NSMutableArray *)array{
-    if(map==nil){
-        map=[[Map alloc]init];
+    if(map){
         [map addArray:array];
         [map addArray:[self copyArray:array]];
         [map shuffleElements];
     }
     else NSLog(@"Карта уже заполнена");
+}
+- (NSUInteger)getCapasity
+{
+    return [map height] * [map width];
+}
+- (void)setCapasityWithHeight:(NSUInteger)height Widht:(NSUInteger)wight
+{
+    if (!map)
+        map =[[Map alloc] init];
+    [[self map]setWidth:height];
+    [[self map]setHeight:wight];
+}
+- (void)fillWithRandomCards
+{
+    NSMutableArray *array = [[Card alloc]getRandomArray:[self getCapasity]];
+    [self setCards:[array copy]];
+}
+- (void)fillWithRandomCardsWithCapasityHeight:(NSUInteger)height Widht:(NSUInteger)wight
+{
+    [self setCapasityWithHeight:height Widht:wight];
+    [self fillWithRandomCards];
 }
 @end

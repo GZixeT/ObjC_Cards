@@ -10,16 +10,17 @@
 #import "GameConsoleInterface.h"
 #import "Card.h"
 
+#define WIGHT 3
+#define HEIGHT 3
+#define EXIT_COMMAND 10
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         GameConsoleInterface *interface=[[GameConsoleInterface alloc]init];
-        Cards *cards=[[Cards alloc]init];
-        NSMutableArray *array = [[Card alloc]getRandomArray:6];
-        [cards setCards:[array copy]];
-        [[cards map]setWidth:3];
-        [[cards map]setHeight:3];
-        int k=10;
-        do{
+        Cards *cards=[Cards sharedInstance];
+        [cards fillWithRandomCardsWithCapasityHeight:WIGHT Widht:HEIGHT];
+        int k=EXIT_COMMAND;
+        while(TRUE){
             printf("1.Начать игру.\n");
             printf("2.Открыть карту.\n");
             printf("10.Выход.\n");
@@ -54,8 +55,11 @@ int main(int argc, const char * argv[]) {
                             printf("Error.\n");
                     }
                 }break;
+                    
+                case EXIT_COMMAND:
+                return 0; // exit game cicle
             }
-        }while(k!=10);
+        };
     }
     return 0;
 }

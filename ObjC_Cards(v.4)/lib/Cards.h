@@ -29,4 +29,8 @@ typedef enum{
 - (BOOL) isGameEnd;
 - (void) setCards:(NSMutableArray*)array;
 - (GameState) getGameState;
+- (void)fillWithRandomCardsWithCapasityHeight:(NSUInteger)height Widht:(NSUInteger)wight;
+- (void)setCapasityWithHeight:(NSUInteger)height Widht:(NSUInteger)wight;
+- (void)fillWithRandomCards;
+- (NSUInteger)getCapasity;
 @end
