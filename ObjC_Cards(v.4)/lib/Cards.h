@@ -31,8 +31,8 @@ typedef enum{
 - (GameState) getGameState;
 - (void)fillWithRandomCards;
 - (void) shuffleMapElements;
-- (void) setCards:(NSMutableArray*)array;
-- (void) openCardWithIndex:(NSInteger)index :(BOOL)isOpen;
+- (void) setCards;
+- (void) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen;
 - (void) fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
 - (void) setCapasityCardDeckWithHeight:(NSUInteger)height CardDeckNumber:(NSUInteger)number; //заполняем размер колоды, а не самой карты
 @end

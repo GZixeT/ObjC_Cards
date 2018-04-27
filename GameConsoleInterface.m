@@ -31,7 +31,7 @@
         }
         else NSLog(@"Карта еще не создана");
     }
-    else NSLog(@"Ишра еще не создана");
+    else NSLog(@"Иuра еще не создана");
 }
 - (void) printOpenCardToConsole:(Card*)card{
     //♠ ♣ ♥ ♦

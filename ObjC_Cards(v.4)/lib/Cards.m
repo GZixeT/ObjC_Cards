@@ -37,17 +37,13 @@ static Cards *uniqueInstance=nil;
     return self;
 }
 - (id) getMapElementWithIndext:(NSInteger)index{
-    if(map==nil){
-        NSLog(@"Карта еще не создана");
-        return false;
-    }
-    return [map objectAtIndex:index];
+    return map?map[index]:false;
 }
-- (void) openCardWithIndex:(NSInteger)index :(BOOL)isOpen{
-    if(map!=nil){
+- (void) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen{
+    if(map){
         if(index<[map count] && [map count]!=0)
         {
-            Card *card=[self getMapElementWithIndext:index];
+            Card *card= map[index];
             [card setOpen:isOpen];
             if(isOpen){
                 if(firstCardOpen<0)
@@ -76,7 +72,7 @@ static Cards *uniqueInstance=nil;
     if(map!=nil){
         int count=0;
         for(int i=0;i<[map count];i++){
-            Card *card=[self getMapElementWithIndext:i];
+            Card *card=map[i];
             if([card open]){
                 count++;
             }
@@ -103,17 +99,24 @@ static Cards *uniqueInstance=nil;
         id tmp;
         for(int i=0;i<[map count];i++){
             index= (int)(arc4random() % (int) ([map count]-i) + i);
-            tmp=[self getMapElementWithIndext:i];
-            [map replaceObjectAtIndex:i withObject:[self getMapElementWithIndext:index]];
+            tmp=map[i];
+            [map replaceObjectAtIndex:i withObject:map[index]];
             [map replaceObjectAtIndex:index withObject:tmp];
         }
     }
     else NSLog(@"Карта еще не создана");
 }
-- (void) setCards:(NSMutableArray *)array{
+- (void) setCards{
     if(map){
-        [map addObjectsFromArray:array];
-        [map addObjectsFromArray:[self copyArray:array]];
+        for (int i = 0; i < cardDeckNumber; i++) {
+            {
+                Card *randomCacrd = [Card createRandomCard];
+                for (int j = 0; j < 2; j++) {
+                    map[i*2+j] = [randomCacrd copy];
+                }
+            }
+            
+        }
         [self shuffleMapElements];
     }
     else NSLog(@"Карта уже заполнена");
@@ -125,8 +128,7 @@ static Cards *uniqueInstance=nil;
 }
 - (void)fillWithRandomCards
 {
-    NSMutableArray *array = [[Card alloc]getRandomArray:cardDeckNumber];
-    [self setCards:[array copy]];
+    [self setCards];
 }
 - (void)fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number
 {

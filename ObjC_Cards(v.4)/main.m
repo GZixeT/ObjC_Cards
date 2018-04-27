@@ -38,15 +38,15 @@ int main(int argc, const char * argv[]) {
                     int number=0;
                     printf("Введите номер карты:");
                     scanf("%d",&number);
-                    [cards openCardWithIndex:number :true];
+                    [cards makeTaskWhithCardAtIndex:number :true];
                     [interface printCards];
                     switch([cards getGameState]){
                         case GameStateTwoCardsOpen:{
                             Card *first=[cards getMapElementWithIndext:[cards firstCardOpen]];
                             Card *second=[cards getMapElementWithIndext:[cards secondCardOpen]];
                             if(![first isEqual:second]){
-                                [cards openCardWithIndex:[cards firstCardOpen] :false];
-                                [cards openCardWithIndex:[cards secondCardOpen] :false];
+                                [cards makeTaskWhithCardAtIndex:[cards firstCardOpen] :false];
+                                [cards makeTaskWhithCardAtIndex:[cards secondCardOpen] :false];
                                 [interface printCards];
                             }
                             [cards setFirstCardOpen:GameStateCloseFirstCard];
