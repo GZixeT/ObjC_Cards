@@ -11,7 +11,10 @@
 @implementation GameConsoleInterface
 - (void) printCards{
     Cards *cards = [Cards sharedInstance];
-    NSUInteger width= [[cards map]count] / [cards height];
+    NSUInteger width;
+    if([cards height]<[[cards map]count])
+        width = [[cards map]count] / [cards height];
+    else return;
     if(cards!=nil){
         if([cards map]!=nil)
         {
