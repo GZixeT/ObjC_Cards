@@ -22,8 +22,7 @@
             printf("----------\n");
             for(int i=0;i<[[cards map]count]/width;i++){
                 for(int j=0;j<width;j++){
-                    [self printOpenCardToConsole:
-                     [cards getMapElementWithIndext:index]];
+                    [self printOpenCardToConsole:[[cards map]objectAtIndex:index]];
                     index++;
                 }
                 printf("\n");

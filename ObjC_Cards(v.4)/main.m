@@ -42,15 +42,7 @@ int main(int argc, const char * argv[]) {
                     [interface printCards];
                     switch([cards getGameState]){
                         case GameStateTwoCardsOpen:{
-                            Card *first=[cards getMapElementWithIndext:[cards firstCardOpen]];
-                            Card *second=[cards getMapElementWithIndext:[cards secondCardOpen]];
-                            if(![first isEqual:second]){
-                                [cards makeTaskWhithCardAtIndex:[cards firstCardOpen] :false];
-                                [cards makeTaskWhithCardAtIndex:[cards secondCardOpen] :false];
-                                [interface printCards];
-                            }
-                            [cards setFirstCardOpen:GameStateCloseFirstCard];
-                            [cards setSecondCardOpen:GameStateCloseFirstCard];
+                           
                         }break;
                         case GameStateEnd:
                             printf("Победа!\n");
