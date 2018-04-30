@@ -10,20 +10,20 @@
 #import "Map.h"
 #import "Card.h"
 typedef enum{
-    GameStateNoOneCardIsOpen,
-    GameStateOneCardIsOpen,
-    GameStateManyCardsIsOpen,
+    GameStateTrue =1,
+    GameStateFalse,
     GameStateEnd,
     GameStateError
 }GameState;
 
 @interface Cards : NSObject
 @property (readonly) NSMutableArray *map;
+@property NSInteger firstCard;
 @property NSInteger height;
 @property NSInteger cardDeckNumber;
 + (Cards*) sharedInstance;
 - (id) init;
-- (GameState) getGameState; //переделать!!!!
-- (void) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen;
+- (GameState) getGameState:(NSInteger)index;
+- (BOOL) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen;
 - (void) fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
 @end

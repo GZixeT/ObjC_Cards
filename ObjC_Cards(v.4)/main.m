@@ -11,7 +11,7 @@
 #import "Card.h"
 
 #define HEIGHT 3
-#define CARD_DECK_NUMBER 6
+#define CARD_DECK_NUMBER 3
 typedef enum{
     GameMenuBegin=1,
     GameMenuOpenCard,
@@ -30,30 +30,45 @@ int main(int argc, const char * argv[]) {
             printf("10.Выход.\n");
             printf("Введите номер действия:");
             scanf("%d",&menuSwitcher);
-            switch(menuSwitcher){
+            switch(menuSwitcher)
+            {
                 case GameMenuBegin:{
                     [interface printCards];
                 }break;
                 case GameMenuOpenCard:{
-                    int number=0;
+                    int index=0;
                     printf("Введите номер карты:");
-                    scanf("%d",&number);
-                    [cards makeTaskWhithCardAtIndex:number :true];
-                    [interface printCards];
-                    switch([cards getGameState]){
-                        case GameStateTwoCardsOpen:{
-                           
-                        }break;
-                        case GameStateEnd:
-                            printf("Победа!\n");
-                            break;
-                        case GameStateError:
-                            printf("Error.\n");
-                            break;
-                        default:
-                            printf("Error.\n");
-                            break;
-                    }
+                    scanf("%d",&index);
+                    if([cards makeTaskWhithCardAtIndex:index :true])
+                    {
+                        [interface printCards];
+                        //NSLog(@"%d",[cards getGameState:index]);
+                        switch([cards getGameState:index])
+                        {
+                            case GameStateFalse:
+                                if([cards firstCard]!=-1 && [cards firstCard]!=index){
+                                    [cards makeTaskWhithCardAtIndex:index :false];
+                                    [cards makeTaskWhithCardAtIndex:[cards firstCard] :false];
+                                    [cards setFirstCard:-1];
+                                    [interface printCards];
+                                }
+                                else [cards setFirstCard:index];
+                                break;
+                            case GameStateEnd:
+                                printf("Победа!\n");
+                                break;
+                            case GameStateError:
+                                printf("Error.\n");
+                                break;
+                            case GameStateTrue:
+                                [cards setFirstCard:-1];
+                                break;
+                            default:
+                                printf("Error.\n");
+                                break;
+                        }
+                    }//if
+                    
                 }break;
                     
                 case GameMenuExit:
@@ -62,7 +77,7 @@ int main(int argc, const char * argv[]) {
                 default:
                     printf("Error.\n");
                     break;
-            }
+            }//switch
         };
     }
     return 0;

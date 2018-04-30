@@ -14,6 +14,7 @@ static Cards *uniqueInstance=nil;
 @synthesize map;
 @synthesize cardDeckNumber;
 @synthesize height;
+@synthesize firstCard;
 + (Cards*) sharedInstance{
     @synchronized(self)
     {
@@ -24,18 +25,26 @@ static Cards *uniqueInstance=nil;
 }
 - (id) init{
     if(self=[super init])
+    {
         map = [[NSMutableArray alloc]init];
+        firstCard=-1;
+    }
     else NSLog(@"Ошибка инициализации");
     return self;
 }
-- (void) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen
+- (BOOL) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen
 {
     if(index<[map count] && [map count]!=0)
     {
         Card *card= map[index];
-        [card setOpen:isOpen];
+        if([card open]!=isOpen){
+            [card setOpen:isOpen];
+            return true;
+        }
+        else NSLog(@"Действие над картой уже произведено");
     }
     else NSLog(@"Такой элемент не существует");
+    return false;
 }
 - (NSMutableArray*) getOpenCards{
     NSMutableArray *openCards= [[NSMutableArray alloc]init];
@@ -46,23 +55,16 @@ static Cards *uniqueInstance=nil;
     }
     return openCards;
 }
-- (GameState) getGameState{
-    GameState state=GameStateError;
-    NSMutableArray *openCards=[self getOpenCards];
-    switch([openCards count])
+- (GameState) getGameState:(NSInteger)index{
+    GameState state=GameStateFalse;
+    if([[self getOpenCards]count]==[map count])
+        return GameStateEnd;
+    else if(firstCard!=-1)
     {
-        case GameStateNoOneCardIsOpen:
-            state=GameStateNoOneCardIsOpen;
-            break;
-        case GameStateOneCardIsOpen:
-            state=GameStateOneCardIsOpen;
-            break;
-        default:
-            if([openCards count]==[map count])
-                state=GameStateEnd;
-            else state=GameStateManyCardsIsOpen;
-            break;
+        if([map[firstCard] isEqual:map[index]])
+            return GameStateTrue;
     }
+    //добвить проверку на открытый элемент
     return state;
 }
 - (NSMutableArray*) copyArray:(NSMutableArray*)array

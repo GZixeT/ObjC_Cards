@@ -31,12 +31,20 @@
     if(object!=nil)
     {
         Card *card=object;
-        if([card value]==value && [card suit]==suit && [card open]==open){
+        if([card value]==value &&
+           [card suit]==suit && [card open]==open){
             return true;
         }
         else return false;
     }
     else NSLog(@"Пустой элемент");
+    return false;
+}
+- (BOOL) isContainsInArray:(NSMutableArray *)array{
+    if(!array || [array count]==0)return false;
+    for(int i=0;i<[array count];i++)
+        if([self isEqual:array[i]])
+            return true;
     return false;
 }
 -(NSMutableArray*)getRandomArray:(NSInteger)count{

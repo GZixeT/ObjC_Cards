@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    CardValueTwo,
+    CardValueTwo = 2,
     CardValueThree,
     CardValueFour,
     CardValueFive,
@@ -37,5 +37,6 @@ typedef enum{
 + (id) createRandomCard;
 - (id) copy;
 - (BOOL) isEqual:(id)object;
+- (BOOL) isContainsInArray:(NSMutableArray*)array;
 - (NSMutableArray*) getRandomArray:(NSInteger)count;
 @end
