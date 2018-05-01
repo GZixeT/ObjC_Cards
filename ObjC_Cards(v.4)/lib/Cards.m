@@ -9,9 +9,15 @@
 //Проба коммита 2
 #import "Cards.h"
 
+#define TABLE_NO_ONE_CARD_OPEN 0
+#define TABLE_ONE_CARD_OPEN 1
+#define TABLE_TWO_CARDS_OPEN 2
+
+
 static Cards *uniqueInstance=nil;
 @implementation Cards
 @synthesize map;
+@synthesize tableOfStates;
 @synthesize cardDeckNumber;
 @synthesize height;
 @synthesize firstCard;
@@ -32,6 +38,32 @@ static Cards *uniqueInstance=nil;
     else NSLog(@"Ошибка инициализации");
     return self;
 }
+- (void) initTableOfStates{
+    NSNumber *option = [NSNumber numberWithInteger:TableOptionDisable];
+    tableOfStates=[[NSMutableArray alloc]init];
+    for(int i=0;i<cardDeckNumber*2;i++){
+        [tableOfStates addObject:option];
+    }
+}
+- (BOOL) makeTaskWithCardAtIndexInTableOfStates:(NSInteger)index :(BOOL)isOpen{
+    if(index<[map count] && [map count]!=0)
+    {
+        TableOption option=[tableOfStates[index] intValue];
+        if(option!=TableOptionLock)
+        {
+            Card *card= map[index];
+            if([card open]!=isOpen)
+            {
+                [card setOpen:isOpen];
+                if(isOpen)tableOfStates[index]=[NSNumber numberWithInteger:TableOptionEnable];
+                else tableOfStates[index]=[NSNumber numberWithInteger:TableOptionDisable];
+                return true;
+            }else NSLog(@"Действие над картой уже произведено");
+        }else NSLog(@"Доступ к элементу закрыт");
+    }
+    else NSLog(@"Такой элемент не существует");
+    return false;
+}
 - (BOOL) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen
 {
     if(index<[map count] && [map count]!=0)
@@ -46,6 +78,14 @@ static Cards *uniqueInstance=nil;
     else NSLog(@"Такой элемент не существует");
     return false;
 }
+- (NSMutableArray *) getTableCellsWithTableOption:(TableOption)tableOption{
+    NSMutableArray *tableCells=[[NSMutableArray alloc]init];
+    for(int i=0;i<[tableOfStates count];i++){
+        if([tableOfStates[i] intValue]==tableOption)
+            [tableCells addObject:[NSNumber numberWithInt:i]];
+    }
+    return tableCells;
+}
 - (NSMutableArray*) getOpenCards{
     NSMutableArray *openCards= [[NSMutableArray alloc]init];
     for(int i=0;i<[map count];i++){
@@ -54,6 +94,47 @@ static Cards *uniqueInstance=nil;
             [openCards addObject:[NSNumber numberWithInteger:i]];
     }
     return openCards;
+}
+- (GameState) getGameStateWithTable{
+    GameState state=GameStateFalse;
+    NSInteger gameEndCount=[[self getTableCellsWithTableOption:TableOptionDisable]count];
+    if(gameEndCount!=0)
+    {
+        NSMutableArray *enableCells = [self getTableCellsWithTableOption:TableOptionEnable];
+        switch ([enableCells count]) {
+            case TABLE_NO_ONE_CARD_OPEN:
+                state=GameStateTrue;
+                break;
+            case TABLE_ONE_CARD_OPEN:
+                state=GameStateTrue;
+                break;
+            case TABLE_TWO_CARDS_OPEN:
+            {
+                int firstCell=[enableCells[0]intValue];
+                int secondCell=[enableCells[1]intValue];
+                Card *first=map[firstCell];
+                Card *second=map[secondCell];
+                if(![first isEqual:second])
+                {
+                    tableOfStates[firstCell]=[NSNumber numberWithInt:TableOptionDisable];
+                    tableOfStates[secondCell]=[NSNumber numberWithInt:TableOptionDisable];
+                    [first setOpen:false];
+                    [second setOpen:false];
+                    state=GameStateFalse;
+                }
+                else{
+                    tableOfStates[firstCell]=[NSNumber numberWithInt:TableOptionLock];
+                    tableOfStates[secondCell]=[NSNumber numberWithInt:TableOptionLock];
+                    state=GameStateTrue;
+                }
+            }break;//case 2 cards open
+                
+            default:
+                NSLog(@"Error GameState func");
+                break;
+        }
+    }else state=GameStateEnd;
+    return state;
 }
 - (GameState) getGameState:(NSInteger)index{
     GameState state=GameStateFalse;
