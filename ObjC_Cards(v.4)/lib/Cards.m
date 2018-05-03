@@ -20,7 +20,6 @@ static Cards *uniqueInstance=nil;
 @synthesize tableOfStates;
 @synthesize cardDeckNumber;
 @synthesize height;
-@synthesize firstCard;
 + (Cards*) sharedInstance{
     @synchronized(self)
     {
@@ -29,11 +28,29 @@ static Cards *uniqueInstance=nil;
     }
     return uniqueInstance;
 }
-- (id) init{
++ (Cards*) sharedInstance:(NSUInteger)height CardDeckNumber:(NSUInteger)number{
+    @synchronized(self)
+    {
+        if(uniqueInstance==nil)
+            uniqueInstance=[[self alloc]initWithHeightAndDeckNumber:height CardDeckNumber:number];
+    }
+    return uniqueInstance;
+}
+-(id)init{ //private
     if(self=[super init])
     {
         map = [[NSMutableArray alloc]init];
-        firstCard=-1;
+        NSLog(@"#init:Далее стоит заполнить параметры и инициализировать таблицу состояний");
+    }
+    else NSLog(@"Ошибка инициализации");
+    return self;
+}
+-(id)initWithHeightAndDeckNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number{
+    if(self=[super init])
+    {
+        map = [[NSMutableArray alloc]init];
+        [self fillWithRandomCardsWithHeightAndNumber:height CardDeckNumber:number];
+        [self initTableOfStates];
     }
     else NSLog(@"Ошибка инициализации");
     return self;
@@ -45,7 +62,7 @@ static Cards *uniqueInstance=nil;
         [tableOfStates addObject:option];
     }
 }
-- (BOOL) makeTaskWithCardAtIndexInTableOfStates:(NSInteger)index :(BOOL)isOpen{
+- (BOOL) makeTaskWithCardAtIndex:(NSInteger)index :(BOOL)isOpen{
     if(index<[map count] && [map count]!=0)
     {
         TableOption option=[tableOfStates[index] intValue];
@@ -64,21 +81,7 @@ static Cards *uniqueInstance=nil;
     else NSLog(@"Такой элемент не существует");
     return false;
 }
-- (BOOL) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen
-{
-    if(index<[map count] && [map count]!=0)
-    {
-        Card *card= map[index];
-        if([card open]!=isOpen){
-            [card setOpen:isOpen];
-            return true;
-        }
-        else NSLog(@"Действие над картой уже произведено");
-    }
-    else NSLog(@"Такой элемент не существует");
-    return false;
-}
-- (NSMutableArray *) getTableCellsWithTableOption:(TableOption)tableOption{
+- (NSMutableArray *) getTableCellsWithTableOption:(TableOption)tableOption{ //private
     NSMutableArray *tableCells=[[NSMutableArray alloc]init];
     for(int i=0;i<[tableOfStates count];i++){
         if([tableOfStates[i] intValue]==tableOption)
@@ -86,16 +89,7 @@ static Cards *uniqueInstance=nil;
     }
     return tableCells;
 }
-- (NSMutableArray*) getOpenCards{
-    NSMutableArray *openCards= [[NSMutableArray alloc]init];
-    for(int i=0;i<[map count];i++){
-        Card *card=[map objectAtIndex:i];
-        if([card open])
-            [openCards addObject:[NSNumber numberWithInteger:i]];
-    }
-    return openCards;
-}
-- (GameState) getGameStateWithTable{
+- (GameState) getGameState{
     GameState state=GameStateFalse;
     NSInteger gameEndCount=[[self getTableCellsWithTableOption:TableOptionDisable]count];
     if(gameEndCount!=0)
@@ -136,19 +130,7 @@ static Cards *uniqueInstance=nil;
     }else state=GameStateEnd;
     return state;
 }
-- (GameState) getGameState:(NSInteger)index{
-    GameState state=GameStateFalse;
-    if([[self getOpenCards]count]==[map count])
-        return GameStateEnd;
-    else if(firstCard!=-1)
-    {
-        if([map[firstCard] isEqual:map[index]])
-            return GameStateTrue;
-    }
-    //добвить проверку на открытый элемент
-    return state;
-}
-- (NSMutableArray*) copyArray:(NSMutableArray*)array
+- (NSMutableArray*) copyArray:(NSMutableArray*)array //private
 {
     NSMutableArray *copy=[[NSMutableArray alloc]init];
     for(int i=0;i<[array count];i++)

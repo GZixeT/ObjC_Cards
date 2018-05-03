@@ -25,15 +25,13 @@ typedef enum{
 @interface Cards : NSObject
 @property (readonly) NSMutableArray *map;
 @property NSMutableArray *tableOfStates;
-@property NSInteger firstCard;
 @property NSInteger height;
 @property NSInteger cardDeckNumber;
 + (Cards*) sharedInstance;
-- (id) init;
++ (Cards*) sharedInstance:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
+- (id)initWithHeightAndDeckNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
+- (BOOL) makeTaskWithCardAtIndex:(NSInteger)index :(BOOL)isOpen;
+- (GameState) getGameState;
 - (void) initTableOfStates;
-- (GameState) getGameStateWithTable;
-- (GameState) getGameState:(NSInteger)index;
-- (BOOL) makeTaskWhithCardAtIndex:(NSInteger)index :(BOOL)isOpen;
-- (BOOL) makeTaskWithCardAtIndexInTableOfStates:(NSInteger)index :(BOOL)isOpen;
-- (void) fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
+- (void)fillWithRandomCardsWithHeightAndNumber:(NSUInteger)height CardDeckNumber:(NSUInteger)number;
 @end
